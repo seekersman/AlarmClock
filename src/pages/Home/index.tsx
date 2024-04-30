@@ -1,8 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 
-import type { PropsWithChildren } from "react";
-
-type HomeProps = PropsWithChildren<{}>;
+import styles from './index.css.ts'
 
 type DataType = {
   id: number;
@@ -19,16 +17,37 @@ const data: DataType[] = [
     matchType: 'day',
     match: 'day',
     isExpired: false
+  },
+  {
+    id: 2,
+    time: '16:30',
+    matchType: 'day',
+    match: 'day',
+    isExpired: false
+  },
+  {
+    id: 3,
+    time: '16:30',
+    matchType: 'day',
+    match: 'day',
+    isExpired: false
+  },
+  {
+    id: 4,
+    time: '16:30',
+    matchType: 'day',
+    match: 'day',
+    isExpired: false
   }
 ]
 
-const Home = ({ children }: HomeProps) => {
+const Home = () => {
   return (
-    <View style={style.container}>
+    <View style={styles.container}>
       {
         data.map((item) => {
           return (
-            <View key={item.id}>
+            <View key={item.id} style={styles.item}>
               <Text>{item.time}</Text>
             </View>
           )
@@ -37,15 +56,5 @@ const Home = ({ children }: HomeProps) => {
     </View>
   )
 }
-
-const style = StyleSheet.create({
-  container: {
-    flex: 1,
-    height: "100%",
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-})
 
 export default Home;
