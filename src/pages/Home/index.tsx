@@ -1,4 +1,10 @@
-import { View, Text, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  Switch,
+  StatusBar,
+  FlatList
+} from 'react-native';
 
 import styles from './index.css.ts'
 
@@ -8,6 +14,7 @@ type DataType = {
   matchType: 'once' | 'day' | 'week' | 'mouth' | 'year' | 'custom',
   match: string;
   isExpired: boolean;
+  isEnabled: boolean
 }
 
 const data: DataType[] = [
@@ -16,42 +23,78 @@ const data: DataType[] = [
     time: '16:30',
     matchType: 'day',
     match: 'day',
-    isExpired: false
+    isExpired: false,
+    isEnabled: true
   },
   {
     id: 2,
     time: '16:30',
     matchType: 'day',
     match: 'day',
-    isExpired: false
+    isExpired: false,
+    isEnabled: true
   },
   {
     id: 3,
     time: '16:30',
     matchType: 'day',
     match: 'day',
-    isExpired: false
+    isExpired: false,
+    isEnabled: true
   },
   {
     id: 4,
     time: '16:30',
     matchType: 'day',
     match: 'day',
-    isExpired: false
+    isExpired: false,
+    isEnabled: true
   }
 ]
 
-const Home = () => {
+type ItemProps = DataType & { handleSwitchToggle: (value: boolean) => void }
+
+const Item = (props: ItemProps) => {
   return (
+    <View key={props.id} style={styles.item}>
+      <View></View>
+      <View>
+        <Switch
+          trackColor={{ false: '#EEEEEE', true: '#3482fe' }}
+          thumbColor={props.isEnabled ? '#f5dd4b' : '#f4f3f4'}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={props.handleSwitchToggle}
+          value={props.isEnabled}
+        />
+      </View>
+    </View>
+  )
+}
+
+const Home = () => {
+  const handleItemSwtichToggle = (item: DataType, value: boolean): void => {
+    item.isEnabled = value;
+    console.log(value)
+  }
+
+  return (
+    // 界面根容器
     <View style={styles.container}>
+      {/* 状态栏控制 */}
+      <StatusBar backgroundColor="transparent" barStyle="dark-content" />
+      {/* 下拉列表 */}
+      <FlatList
+        style={styles.list}
+        data={data}
+        renderItem={({ item }) => <Item {...item} handleSwitchToggle={(value) => handleItemSwtichToggle(item, value)} />}
+        keyExtractor={(item) => item.id + ''}
+      />
       {
-        data.map((item) => {
-          return (
-            <View key={item.id} style={styles.item}>
-              <Text>{item.time}</Text>
-            </View>
-          )
-        })
+        // data.map(item => (
+        //   <View key={item.id} style={styles.item}>
+        //     <Text>{item.time}</Text>
+        //   </View>
+        // ))
       }
     </View>
   )
