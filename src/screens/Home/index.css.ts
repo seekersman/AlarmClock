@@ -15,17 +15,32 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 80,
     borderRadius: 20,
-    justifyContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingLeft: 20,
     paddingRight: 20,
-    marginTop: 10
+    marginTop: 10,
+    flexDirection: 'row'
   },
   item_left: {
+    flex: 1
+  },
+  item_left_time: {
+    flex: 1.4,
+    flexDirection: 'row',
+    alignItems: 'flex-end'
+  },
+  item_left_time_text: {
+    fontSize: 24,
+    color: 'black'
+  },
+  item_left_info: {
     flex: 1,
-
+    flexDirection: 'row',
+    alignItems: 'flex-start'
   },
   item_right: {
-    width: '20%'
+    width: '20%',
   }
 })
 
