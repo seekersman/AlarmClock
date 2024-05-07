@@ -4,7 +4,8 @@ import {
   Text,
   Switch,
   FlatList,
-  ListRenderItem
+  Pressable,
+  ListRenderItem,
 } from 'react-native';
 import type { PropsWithChildren } from 'react';
 import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
@@ -13,6 +14,7 @@ import { timeType2CN, calculateRestTime } from '@/utils/time.ts';
 import type { DataType } from '@/types/time.ts';
 
 import styles from './index.css.ts';
+import AddIcon from './add.svg';
 
 
 const initData: DataType[] = [
@@ -22,7 +24,8 @@ const initData: DataType[] = [
     type: 'day',
     match: 'day',
     isEnabled: true,
-    frame: 'AM'
+    frame: 'AM',
+    remark: '备注来的'
   },
   {
     id: 2,
@@ -50,8 +53,7 @@ const initData: DataType[] = [
   }
 ]
 
-type ItemProps = DataType & { handleSwitchToggle: (value: boolean) => void }
-
+// 自定义文本
 type MTextProps = PropsWithChildren<{
   isEnabled: boolean;
   style?: Object;
@@ -60,26 +62,33 @@ const MText = ({ style, isEnabled, children }: MTextProps) => {
   return <Text style={[style, !isEnabled && { color: '#9a9a9a' }]}>{children}</Text>
 }
 
+// 子项渲染函数
+type ItemProps = DataType & { handleSwitchToggle: (value: boolean) => void, handleItemPress: (id: number) => void }
 const Item = (props: ItemProps) => {
   return (
-    <View key={props.id} style={styles.item}>
+    <Pressable
+      style={({ pressed }) => [
+        styles.item,
+        {
+          backgroundColor: pressed ? '#f5f5f5' : 'white',
+        },
+      ]}
+      onPress={() => props.handleItemPress(props.id)}>
       <View style={styles.item_left}>
         <View style={styles.item_left_time}>
           <MText style={styles.item_left_time_text} isEnabled={props.isEnabled}>{props.time}</MText>
-          {/* <Text style={[styles.item_left_time_text, !props.isEnabled && { color: '#9a9a9a' }]}></Text> */}
           <MText isEnabled={props.isEnabled}>{props.frame === 'AM' ? '上午' : "下午"}</MText>
-          {/* <Text style={[!props.isEnabled && { color: '#9a9a9a' }]}>{props.frame === 'AM' ? '上午' : "下午"}</Text> */}
-          <MText isEnabled={props.isEnabled}> | </MText>
-          {/* <Text style={[!props.isEnabled && { color: '#9a9a9a' }]}> | </Text> */}
-
+          {props.remark && (
+            <MText isEnabled={props.isEnabled}> | </MText>
+          )}
+          {props.remark && (
+            <MText isEnabled={props.isEnabled}>{props.remark}</MText>
+          )}
         </View>
         <View style={styles.item_left_info}>
           <MText isEnabled={props.isEnabled}>{timeType2CN(props.type)}</MText>
-          {/* <Text style={[!props.isEnabled && { color: '#9a9a9a' }]}>{timeType2CN(props.type)}</Text> */}
           <MText isEnabled={props.isEnabled}> | </MText>
-          {/* <Text style={[!props.isEnabled && { color: '#9a9a9a' }]}> | </Text> */}
           <MText isEnabled={props.isEnabled}>{calculateRestTime(props.time, props.type)}</MText>
-          {/* <Text style={[!props.isEnabled && { color: '#9a9a9a' }]}>{calculateRestTime(props.time, props.type)}</Text> */}
         </View>
       </View>
       <View style={styles.item_right}>
@@ -91,11 +100,15 @@ const Item = (props: ItemProps) => {
           value={props.isEnabled}
         />
       </View>
-    </View>
+    </Pressable>
   )
 }
 
-const Home = () => {
+// 显示页面
+type HomeProps = {
+  navigation: any;
+}
+const Home = ({ navigation }: HomeProps) => {
   const [data, setData] = useState(initData);
   const handleItemSwtichToggle = (item: DataType, value: boolean): void => {
     item.isEnabled = value;
@@ -107,11 +120,17 @@ const Home = () => {
       return value;
     })
   }
-
-  const ListRender: ListRenderItem<DataType> = ({ item }) => {
-    return <Item {...item} handleSwitchToggle={(value) => handleItemSwtichToggle(item, value)} />
+  const handleItemPress = (id: number) => {
+    const d = data.find(i => i.id === id);
+    navigation.push('Edit', {
+      ...d,
+      name: 'update'
+    })
   }
-
+  // 渲染子项函数
+  const ListRender: ListRenderItem<DataType> = ({ item }) => {
+    return <Item {...item} handleSwitchToggle={(value) => handleItemSwtichToggle(item, value)} handleItemPress={handleItemPress} />
+  }
   return (
     // 界面根容器
     <View style={styles.container}>
@@ -128,6 +147,21 @@ const Home = () => {
 
 export default Home;
 
-export const options: NativeStackNavigationOptions = {
-  title: '闹钟'
+export const homeOptions: (props: { navigation: any }) => NativeStackNavigationOptions = ({ navigation }) => {
+  return {
+    title: '闹钟',
+    headerRight: () => {
+      return (
+        <Pressable onPress={() => {
+          navigation.push('Edit', {
+            name: 'add'
+          })
+        }}>
+          <View>
+            <AddIcon height={30} width={30} />
+          </View>
+        </Pressable>
+      )
+    }
+  }
 }

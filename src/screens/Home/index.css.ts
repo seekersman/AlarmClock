@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   item_left_time: {
-    flex: 1.4,
+    flex: 1.3,
     flexDirection: 'row',
     alignItems: 'flex-end'
   },
