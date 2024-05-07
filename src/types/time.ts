@@ -6,6 +6,6 @@ export type DataType = {
   type: TimeType; // 闹钟类型
   frame: TimeFrame; // 时段，上午 am ，下午 pm
   match: string | undefined; // 匹配的正则表达式
-  remakr?: string; // 备注
+  remark?: string; // 备注
   isEnabled: boolean; // 是否可用
 }
