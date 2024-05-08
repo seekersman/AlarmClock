@@ -19,7 +19,7 @@ function App(): React.JSX.Element {
   return (
     <NavigationContainer>
       {/* 状态栏控制 */}
-      <StatusBar backgroundColor="transparent" barStyle={theme === 'light' ? 'dark-content' : 'light-content'} />
+      <StatusBar backgroundColor="#EEEEEE" barStyle={theme === 'light' ? 'dark-content' : 'light-content'} />
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={Home} options={homeOptions} />
         <Stack.Screen name="Edit" component={Edit} options={editOptions} />

@@ -9,3 +9,8 @@ export type DataType = {
   remark?: string; // 备注
   isEnabled: boolean; // 是否可用
 }
+
+export type ScreenOptions = {
+  route: any;
+  navigation: any;
+}

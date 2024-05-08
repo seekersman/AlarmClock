@@ -2,7 +2,7 @@
  * 关于时间方面的计算工具方法
  */
 
-import type { TimeType } from "@/types/time.ts";
+import type { TimeType } from "@/types/type";
 
 /** 将类型转成中文 */
 export const timeType2CN = (type: TimeType): string => {
