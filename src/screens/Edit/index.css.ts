@@ -13,7 +13,9 @@ export default StyleSheet.create({
   date: {
     height: 100,
     flexDirection: 'row',
-    paddingHorizontal: 30
+    paddingHorizontal: 30,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   date_divider: {
     height: '100%',

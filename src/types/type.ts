@@ -14,3 +14,8 @@ export type ScreenOptions = {
   route: any;
   navigation: any;
 }
+
+export type KeyValue = {
+  label: string;
+  value: string;
+}

@@ -1,26 +1,51 @@
-import { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, FlatList } from "react-native";
+
+import type { KeyValue } from "@/types/type";
 
 
 const styles = StyleSheet.create({
-  date: {
-
+  wrapper: {
+    height: 200,
+    backgroundColor: 'yellow'
   },
-  selected: {
-
+  container: {
+    height: 100,
+  },
+  list: {
+    height: 20,
+  },
+  item: {
+    height: 40,
   }
 })
 
 type SelectProps = {
-  data: Array<any>
+  data: Array<KeyValue>
 }
 const Select = ({ data }: SelectProps) => {
-  const [seleted, setSelected] = useState(0);
+  const l = data.length,
+    d = new Array(l).fill(null).concat(data).concat(new Array(l).fill(null))
   return (
-    <View style={styles.date}>
-      {
-        data.map((i, n) => <Text>{i}</Text>)
-      }
+    <View style={styles.wrapper}>
+      <View style={styles.container}>
+        <FlatList
+          data={d}
+          renderItem={({ item }) => (
+            <View style={styles.item}>
+              {item ? <Text>{item.label}</Text> : <Text>test</Text>}
+            </View>
+          )}
+          getItemLayout={(data, index) => (
+            { length: data!.length, offset: 20 * index, index }
+          )}
+          initialScrollIndex={l}
+          onScroll={(event) => {
+            const y = event.nativeEvent.contentOffset.y;
+            event.nativeEvent.contentOffset.y = 0;
+            event.preventDefault();
+          }}
+        />
+      </View>
     </View>
   )
 }
